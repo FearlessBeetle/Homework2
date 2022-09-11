@@ -1,9 +1,5 @@
 package homework;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -106,7 +102,6 @@ public class ComplexExamples {
         /*
         Task1
             Убрать дубликаты, отсортировать по идентификатору, сгруппировать по имени
-
             Что должно получиться
                 Key:Amelia
                 Value:4
@@ -118,15 +113,26 @@ public class ComplexExamples {
                 Value:1
          */
 
+        System.out.println("Task - 1");
+        System.out.println();
+        Map<String, List<Person>> distinctSortGroup = Arrays.stream(RAW_DATA)
+                .distinct()
+                .sorted(Comparator.comparingInt(Person::getId))
+                .collect(groupingBy(Person::getName));
 
-
+        distinctSortGroup.forEach((s, people) ->
+                System.out.printf("Key: %s\nValue: %d\n", s, people.size()));
         /*
         Task2
 
             [3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10
          */
-
-
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
+        System.out.println("Task - 2");
+        System.out.println();
+        findTwoConstituteNumbers(new int[]{3, 4, 2, 7}, 10);
 
         /*
         Task3
@@ -138,5 +144,52 @@ public class ComplexExamples {
                     fuzzySearch("cwheeel", "cartwheel"); // false
                     fuzzySearch("lw", "cartwheel"); // false
          */
+        System.out.println();
+        System.out.println();
+        System.out.println("**************************************************");
+        System.out.println();
+        System.out.println("Task - 3");
+        System.out.println();
+        System.out.println(fuzzySearch("car", "ca6$$#_rtwheel")); // true
+        System.out.println(fuzzySearch("cwhl", "cartwheel")); // true
+        System.out.println(fuzzySearch("cwhee", "cartwheel")); // true
+        System.out.println(fuzzySearch("cartwheel", "cartwheel")); // true
+        System.out.println(fuzzySearch("cwheeel", "cartwheel")); // false
+        System.out.println(fuzzySearch("lw", "cartwheel")); // false
+
+    }
+
+    public static void findTwoConstituteNumbers(int[] array, int n) {
+        Arrays.sort(array);
+        int firstFlag = 0;
+        int lastFlag = array.length - 1;
+        while (firstFlag < lastFlag) {
+            int x = array[lastFlag] + array[firstFlag];
+            if (x == n) {
+                System.out.printf("[%d, %d]", array[firstFlag], array[lastFlag]);
+                firstFlag++;
+                lastFlag--;
+            } else {
+                if (x < n) firstFlag++;
+                else lastFlag--;
+            }
+        }
+    }
+
+    public static boolean fuzzySearch(String toFind, String from) {
+        char[] arrayToFind = toFind.toCharArray();
+        char[] arrayFrom = from.toCharArray();
+        int lastElementIndex = 0;
+        int numberOfСoincidence = 0;
+        for (int i = 0; i < arrayToFind.length; i++) {
+            for (int j = lastElementIndex; j < arrayFrom.length; j++) {
+                if (arrayToFind[i] == arrayFrom[j]) {
+                    numberOfСoincidence++;
+                    lastElementIndex = ++j;
+                    break;
+                }
+            }
+        }
+        return (arrayToFind.length - numberOfСoincidence) == 0;
     }
 }
