@@ -116,6 +116,7 @@ public class ComplexExamples {
         System.out.println("Task - 1");
         System.out.println();
         Map<String, List<Person>> distinctSortGroup = Arrays.stream(RAW_DATA)
+                .filter(Objects::nonNull)
                 .distinct()
                 .sorted(Comparator.comparingInt(Person::getId))
                 .collect(groupingBy(Person::getName));
@@ -179,17 +180,13 @@ public class ComplexExamples {
     public static boolean fuzzySearch(String toFind, String from) {
         char[] arrayToFind = toFind.toCharArray();
         char[] arrayFrom = from.toCharArray();
-        int lastElementIndex = 0;
-        int numberOfСoincidence = 0;
-        for (int i = 0; i < arrayToFind.length; i++) {
-            for (int j = lastElementIndex; j < arrayFrom.length; j++) {
-                if (arrayToFind[i] == arrayFrom[j]) {
-                    numberOfСoincidence++;
-                    lastElementIndex = ++j;
-                    break;
-                }
+        int index = 0;
+        for (int i = 0; i < arrayFrom.length; i++) {
+            if (arrayFrom[i] == arrayToFind[index]) {
+                index++;
             }
+            if (index == arrayToFind.length) return true;
         }
-        return (arrayToFind.length - numberOfСoincidence) == 0;
+        return index == arrayToFind.length;
     }
 }
